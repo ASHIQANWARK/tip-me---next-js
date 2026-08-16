@@ -21,7 +21,6 @@ type TipData = {
   feedbackChips: string[];
 };
 
-// I keep tweaking these numbers but never quite happy with them
 const DATA: TipData = {
   profile: {
     name: "Ahmed Al-Mansouri",
@@ -38,7 +37,6 @@ const DATA: TipData = {
   feedbackChips: ["very friendly", "very helpful", "Excellent service"],
 };
 
-// Honestly should probably move this to a config file but it's fine for now
 const RATING_MAP = {
   1: { emoji: "😞", label: "Needs Improvement" },
   2: { emoji: "🙁", label: "Could Be Better" },
@@ -49,11 +47,8 @@ const RATING_MAP = {
 
 const DEFAULT_RATING = { emoji: "🙂", label: "Good Experience" };
 
-// Quick and dirty currency formatter - works for now
 const formatMoney = (amount: number) => 
   `${DATA.currency} ${amount.toFixed(2)}`;
-
-// Simple chevron - copied from another project
 function Chevron({ expanded }: { expanded: boolean }) {
   return (
     <svg
@@ -73,7 +68,6 @@ function Chevron({ expanded }: { expanded: boolean }) {
   );
 }
 
-// Message icon - had to tweak the stroke width a few times
 function MessageIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -94,8 +88,6 @@ function MessageIcon() {
     </svg>
   );
 }
-
-// I know there's a better way to do this but this works
 function Star({ filled }: { filled: boolean }) {
   return (
     <svg
@@ -108,7 +100,7 @@ function Star({ filled }: { filled: boolean }) {
   );
 }
 
-// TODO: Replace with proper back button from design system
+
 function BackArrow() {
   return (
     <svg viewBox="0 0 20 20" aria-hidden="true">
@@ -125,7 +117,7 @@ function BackArrow() {
 }
 
 export default function Home() {
-  // State management - I know I could use useReducer but this is simpler
+
   const [selectedTip, setSelectedTip] = useState<number | null>(null);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [summaryOpen, setSummaryOpen] = useState(true);
@@ -135,20 +127,16 @@ export default function Home() {
   const [customerName, setCustomerName] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // Get first name - handles edge cases... mostly
   const getFirstName = () => {
     const parts = DATA.profile.name.trim().split(/\s+/);
     return parts[0] || DATA.profile.name;
   };
   const firstName = getFirstName();
 
-  // Check if any feedback was provided
   const hasFeedback = rating > 0 || selectedChips.length > 0 || experience.trim().length > 0;
 
-  // Determine if the user can proceed
   const canProceed = selectedTip !== null || hasFeedback;
 
-  // Calculate payment breakdown - probably should move this to a helper
   const paymentBreakdown = useMemo(() => {
     if (selectedTip === null) return null;
 
@@ -163,7 +151,6 @@ export default function Home() {
     };
   }, [selectedTip]);
 
-  // Handle tip selection
   const onTipSelect = (amount: number) => {
     setSelectedTip(amount);
     setFeedbackOpen(true);
@@ -171,7 +158,6 @@ export default function Home() {
     setIsSubmitted(false);
   };
 
-  // Toggle chip selection
   const toggleChip = (chip: string) => {
     setSelectedChips(prev => 
       prev.includes(chip) 
@@ -180,17 +166,15 @@ export default function Home() {
     );
   };
 
-  // Get current rating data
+ 
   const currentRating = RATING_MAP[rating as keyof typeof RATING_MAP] || DEFAULT_RATING;
 
-  // Dynamic CTA text - feels more natural this way
-  const getCtaText = () => {
+ const getCtaText = () => {
     if (isSubmitted) return "🎉 Thank You!";
     if (selectedTip !== null) return `Pay ${formatMoney(selectedTip)}`;
     return "Choose a tip or add feedback";
   };
 
-  // Reset everything - maybe overkill but it works
   const resetEverything = () => {
     setSelectedTip(null);
     setFeedbackOpen(false);
@@ -202,7 +186,7 @@ export default function Home() {
     setIsSubmitted(false);
   };
 
-  // Submit handler
+  
   const onSubmit = () => {
     if (!canProceed) return;
     setIsSubmitted(true);
@@ -212,7 +196,7 @@ export default function Home() {
     <main className="page-shell">
       <section className="device-frame" aria-label="Tip Me">
         <div className="screen">
-          {/* Header - keeping it simple */}
+         
           <header className="topbar">
             <h1>Tip Me</h1>
             <button
@@ -272,7 +256,7 @@ export default function Home() {
             </div>
           </section>
 
-          {/* Feedback section - this was tricky to get right */}
+          {/* Feedback section  */}
           <section className={`feedback-card ${feedbackOpen ? "feedback-card--open" : ""}`}>
             <button
               type="button"
